@@ -9,6 +9,7 @@ const ACTIONS = {
 }
 
 const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json'
+
 function reducer(state, action){
 	switch (action.type){
 		case ACTIONS.MAKE_REQUEST:
@@ -26,11 +27,10 @@ function reducer(state, action){
 export default function useFetchJobs(params, page) {
 	const [state, dispatch] = useReducer(reducer, {jobs: [], loading: true})
 	
-    useEffect(() =>{
+    useEffect(() => {
 
-      const cancelToken = axios.CancelToken.source()
-      
-      dispatch({ type: ACTIONS.MAKE_REQUEST})
+      const cancelToken = axios.CancelToken.source()     
+      dispatch({ type: ACTIONS.MAKE_REQUEST })
       axios.get(BASE_URL, {
       	cancelToken: cancelToken.token,
       	params: { markdown: true, page: page, ...params }
@@ -41,9 +41,9 @@ export default function useFetchJobs(params, page) {
         dispatch({ type: ACTIONS.ERROR, payload: { error: e } })	
       })
 
-        return () => {
-        	cancelToken.cancel()
-        }
+      return () => {
+        cancelToken.cancel()
+      }
 
     }, [params, page])
 
